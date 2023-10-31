@@ -1,0 +1,3 @@
+./csv_to_html.py user_emails.csv /var/www/html/prueba.html
+./csv_to_html.py error_message.csv /var/www/html/prueba2.html
+./csv_to_html.py user_statistics.csv /var/www/html/prueba3.html
