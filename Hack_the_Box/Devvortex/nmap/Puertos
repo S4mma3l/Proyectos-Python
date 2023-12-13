@@ -1,5 +1,5 @@
-# Nmap 7.94SVN scan initiated Mon Dec 11 19:03:35 2023 as: nmap -p- -sS --min-rate 5000 -vvv -n -Pn -oG Puertos 10.10.11.242
+# Nmap 7.94SVN scan initiated Wed Dec 13 08:59:33 2023 as: nmap -p- -sS --min-rate 5000 -vvv -n -Pn -oG Puertos 10.10.11.242
 # Ports scanned: TCP(65535;1-65535) UDP(0;) SCTP(0;) PROTOCOLS(0;)
 Host: 10.10.11.242 ()	Status: Up
 Host: 10.10.11.242 ()	Ports: 22/open/tcp//ssh///, 80/open/tcp//http///	Ignored State: closed (65533)
-# Nmap done at Mon Dec 11 19:03:48 2023 -- 1 IP address (1 host up) scanned in 13.33 seconds
+# Nmap done at Wed Dec 13 08:59:50 2023 -- 1 IP address (1 host up) scanned in 17.29 seconds
