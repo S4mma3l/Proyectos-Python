@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracking App</title>
+</head>
+<body>
+    <h1>Proyectos y Tiempo Registrado</h1>
+    <ul>
+        {% for project in projects %}
+            <li>
+                {{ project['name'] }}
+                {% if 'elapsed_time' in project %}
+                    - Tiempo: {{ project['elapsed_time'] }}
+                {% else %}
+                    <a href="{{ url_for('stop_time', project_index=loop.index0) }}">Detener Tiempo</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    <form action="/add_project" method="post">
+        <label for="project_name">Nombre del Proyecto:</label>
+        <input type="text" id="project_name" name="project_name" required>
+        <input type="submit" value="Agregar Proyecto">
+    </form>
+</body>
+</html>
